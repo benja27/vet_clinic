@@ -35,7 +35,7 @@
 
 # 📖 Vet Clinic <a name="about-project"></a>
 
-**Vet Clinic** is a... Describe your project in 1 or 2 sentences.
+**Vet Clinic** is a project where I practice with SQL databases
 
 ## 🛠 Built With <a name="built-with"></a>
 
@@ -61,10 +61,7 @@
 
 
 
-## 🚀 Live Demo <a name="live-demo"></a>
 
-Coming soon...
-<!-- - [Live Demo Link](https://google.com) -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
