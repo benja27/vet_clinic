@@ -18,3 +18,10 @@ select * from animals;
 -- (10, 'Blossom', '1998-10-13', 3, true, 17);
 -- INSERT INTO animals (ID, NAME, DATE_OF_BIRTH, SCAPE_ATTEMPTS, NEUTERED, WEIGHT_KG) VALUES
 -- (11, 'Ditto', '2022-05-14', 4, true, 22);
+-- fisrt transaction
+BEGIN;
+UPDATE animals SET species = 'unspecified';
+SELECT * FROM animals;
+ROLLBACK;
+SELECT * FROM animals;
+-- seccond transaction
