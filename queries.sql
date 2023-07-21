@@ -1,61 +1,41 @@
 /*Queries that provide answers to the questions from all projects.*/
 
--- =======================================
---  SECOND DAY QUERIES
--- =======================================
+--What animals belong to Melody Pond?
+SELECT a.*
+FROM animals a
+JOIN owners o ON a.owner_id = o.id
+WHERE o.full_name = 'Melody Pond';
 
--- species column goes from null to unspecified and rollback
-BEGIN;
-UPDATE animals SET species = 'unspecified';
-SELECT * FROM animals;
-ROLLBACK;
-SELECT * FROM animals;
+--List of all animals that are pokemon (their type is Pokemon).
+select a.* FROM animals a join species s ON a.species_id = s.id where s.name = 'Pokemon';
 
--- species are set to either digimon or pokemon
-BEGIN;
-UPDATE animals SET species = 'digimon' WHERE NAME LIKE '%mon';
-UPDATE animals SET species = 'pokemon' WHERE species IS NULL;
-SELECT * FROM animals;
-COMMIT;
-SELECT * FROM animals;
+--List all owners and their animals, remember to include those that don't own any animal.
+SELECT o.full_name AS owner_name, a.*
+FROM owners o
+LEFT JOIN animals a ON o.id = a.owner_id;
 
---  delete animals table and rollback
-BEGIN;
-DELETE FROM animals;
-SELECT * FROM animals;
-ROLLBACK;
-SELECT * FROM animals;
-
--- animals weight is multiplied by -1 and savepoint
-BEGIN;
-DELETE FROM animals WHERE DATE_OF_BIRTH > '2022-01-01';
-SAVEPOINT my_savepoint;
-UPDATE animals SET WEIGHT_KG = -1 * WEIGHT_KG;
-ROLLBACK TO SAVEPOINT my_savepoint;
-UPDATE animals SET WEIGHT_KG = -1 * WEIGHT_KG WHERE WEIGHT_KG < 0;
-COMMIT;
-
--- how many animals are there?
-SELECT COUNT(*) AS totalAnimals FROM animals;
-
---How many animals have never tried to escape?
-SELECT COUNT(*) AS neverTriedEscape FROM animals WHERE SCAPE_ATTEMPTS = 0;
-
---What is the average weight of animals?
-SELECT AVG(WEIGHT_KG) AS averageWeight FROM animals;
-
---Who escapes the most, neutered or not neutered animals?
-SELECT NEUTERED, MAX(SCAPE_ATTEMPTS) AS maxEscapeAttempts
+--How many animals are there per species?
+SELECT species_id, COUNT(*) AS total_animals
 FROM animals
-GROUP BY NEUTERED;
+GROUP BY species_id;
 
---What is the minimum and maximum weight of each type of animal?
-SELECT NAME, MIN(WEIGHT_KG) AS minWeight, MAX(WEIGHT_KG) AS maxWeight
-FROM animals
-GROUP BY NAME;
+--List all Digimon owned by Jennifer Orwell.
+SELECT a.*
+FROM animals a
+JOIN owners o ON a.owner_id = o.id
+JOIN species s ON a.species_id = s.id
+WHERE o.full_name = 'Jennifer Orwell' AND s.name = 'Digimon';
 
---What is the average number of escape attempts per animal type of those born between 1990 and 2000?
-SELECT NAME, AVG(SCAPE_ATTEMPTS) AS midEscapeAttempts
-FROM animals
-WHERE DATE_OF_BIRTH BETWEEN '1990-01-01' AND '2000-12-31'
-GROUP BY NAME;
+--List all animals owned by Dean Winchester that haven't tried to escape.
+SELECT a.*
+FROM animals a
+JOIN owners o ON a.owner_id = o.id
+WHERE o.full_name = 'Dean Winchester' AND a.scape_attempts = 0;
+
+--Who owns the most animals?
+SELECT o.full_name, COUNT(a.id) AS num_animals_owned
+FROM owners o
+LEFT JOIN animals a ON o.id = a.owner_id
+GROUP BY o.id, o.full_name
+ORDER BY num_animals_owned DESC
+LIMIT 1;
