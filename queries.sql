@@ -39,3 +39,76 @@ LEFT JOIN animals a ON o.id = a.owner_id
 GROUP BY o.id, o.full_name
 ORDER BY num_animals_owned DESC
 LIMIT 1;
+
+
+--===============================================
+-- JOIN TABLE FOR VISITS QUERIES
+--===============================================
+SELECT A.NAME
+FROM ANIMALS A
+JOIN VISITS V ON A.ID = V.ANIMAL_ID
+JOIN VETS VE ON V.VET_ID = VE.ID
+WHERE VE.NAME = 'William Tatcher'
+ORDER BY V.VISIT_DATE DESC LIMIT 1;
+
+SELECT COUNT( DISTINCT A.NAME)
+FROM ANIMALS A
+JOIN VISITS V ON A.ID = V.ANIMAL_ID
+JOIN VETS VE ON V.VET_ID = VE.ID
+WHERE VE.NAME = 'Stephanie Mendez';
+
+select vet.name as vet_name, s.name as speciality_name
+FROM vets vet
+left join specialitations esp  on esp.vet_id = vet.id  
+left join species s on esp.species_id = s.id;  
+
+SELECT vet.name as vet_name, a.name as animal_name, v.visit_date 
+from animals a    
+join visits v on v.animal_id = a.id
+join vets vet on v.vet_id = vet.id
+WHERE vet.name = 'Stephanie Mendez' 
+and v.visit_date BETWEEN '2020-04-01' and '2020-08-30'; 
+
+SELECT  A.NAME , COUNT( V.ANIMAL_ID) AS VCOUNT
+FROM ANIMALS A  
+JOIN visits V  ON V.animal_id = A.id
+GROUP BY A.NAME
+ORDER BY VCOUNT DESC LIMIT 1;
+
+SELECT A.NAME, V.VISIT_DATE as date 
+FROM ANIMALS A  
+JOIN VISITS V ON V.animal_id = A.id
+JOIN vets VET ON V.vet_id = VET.id  
+WHERE VET.name = 'Maisy Smith'
+ORDER BY date LIMIT 1;
+
+SELECT
+V.VISIT_DATE,
+VET.NAME VET_NAME,
+VET.AGE,
+A.NAME AS ANIMAL_NAME, 
+A.DATE_OF_BIRTH, 
+A.SCAPE_ATTEMPTS, 
+A.NEUTERED,
+A.WEIGHT_KG  
+FROM visits V
+JOIN animals A ON V.animal_id = A.id
+JOIN  vets VET ON V.VET_ID = VET.ID
+ORDER BY V.visit_date DESC LIMIT 1;
+
+SELECT COUNT(*) AS num_visits
+FROM visits v
+JOIN vets vt ON v.vet_id = vt.id
+JOIN animals a ON v.animal_id = a.id
+LEFT JOIN specialitations s ON vt.id = s.vet_id AND a.species_id = s.species_id
+WHERE s.vet_id IS NULL;
+
+SELECT a.species_id, COUNT(*) AS visit_count, sp.name AS species_name
+FROM visits v
+INNER JOIN vets ve ON ve.id = v.vet_id
+INNER JOIN animals a ON a.id = v.animal_id
+INNER JOIN species sp ON sp.id = a.species_id
+WHERE ve.name = 'Maisy Smith'
+GROUP BY a.species_id, sp.name
+ORDER BY visit_count DESC
+LIMIT 1;

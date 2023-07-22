@@ -35,4 +35,22 @@ ALTER table animals ADD COLUMN owner_id INT;
 ALTER TABLE animals ADD FOREIGN KEY (owner_id)  REFERENCES owners (id);
 
 
+CREATE TABLE vets (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20) not null,
+    age INT NOT null,
+    date_of_graduation DATE
+);
 
+CREATE TABLE specialitations (
+    vet_id INT REFERENCES vets(id),
+    species_id INT REFERENCES species(id),
+    PRIMARY KEY (vet_id, species_id)
+);
+
+CREATE TABLE visits (
+    id serial PRIMARY key, 
+    vet_id INT REFERENCES vets(id),
+    animal_id INT REFERENCES animals(id),
+    visit_date date
+);
