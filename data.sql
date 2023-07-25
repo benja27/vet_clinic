@@ -74,3 +74,15 @@ SET owner_id = (
         WHEN name IN ('Angemon', 'Boarmon') THEN (SELECT id FROM owners WHERE full_name = 'Dean Winchester')
     END
 );
+
+
+
+-- UPDATE PERFORMANCE
+
+explain analyze select count(*) from visits where animal_id  = 4;
+explain analyze SELECT * FROM visits where vet_id = 2;
+explain analyze SELECT * FROM owners where email = 'owner_18327@mail.com';
+
+
+
+

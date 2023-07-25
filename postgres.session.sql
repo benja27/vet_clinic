@@ -1,3 +1,1 @@
-begin;
-select name FROM animals where scape_attempts > 5;
-
+explain analyze SELECT COUNT(*) FROM visits where animal_id = 4
